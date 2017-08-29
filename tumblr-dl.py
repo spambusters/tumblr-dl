@@ -6,7 +6,7 @@ import requests
 
 
 # PATH to config file with api key
-CONFIG = ''
+CONFIG = '../config.txt'
 
 # Be nice to tumblr servers
 RATE_LIMIT = 3  # seconds
@@ -19,10 +19,8 @@ def main():
     tag = args.tag.lower() if args.tag else None
 
     api_key = parse_api_key()
-    local_folders(blog, tag)
 
-    print(f'[+] Targeting {tag or "ALL"} images with'
-          f'>= {notes_min or "NO LIMIT"} notes\n')
+    make_dirs(blog, tag)
 
     find_images(blog, api_key, tag, notes_min)
 
@@ -42,6 +40,10 @@ def get_args():
 
 
 def parse_api_key():
+    """Parse API key from config file located in root directory"""
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(root_dir)
+
     try:
         with open(CONFIG) as file:
             api_key = file.readline().strip()
@@ -50,7 +52,7 @@ def parse_api_key():
         raise SystemExit(f'\n[!] Config file {CONFIG} not found\n')
 
 
-def local_folders(blog, tag):
+def make_dirs(blog, tag):
     """Create local folders"""
     path = blog
     if tag:
@@ -68,6 +70,9 @@ def local_folders(blog, tag):
 def find_images(blog, api_key, tag, notes_min):
     """Loop through JSON results to find image urls"""
     offset = 0
+
+    print(f'[+] Targeting {tag or "ALL"} images with'
+          f'>= {notes_min or "NO LIMIT"} notes\n')
 
     while True:
         js = get_json(blog, api_key, offset, tag)

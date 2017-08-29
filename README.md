@@ -1,15 +1,18 @@
 # tumblr-dl
 Use the Tumblr API to download images from a blog, with optional tags and note count requirements
 
+## Requirements  
+1. Python 3.6  
+2. requests library `pip install requests`  
+
 ## Usage
 ```
-usage: tumblr-dl.py [-h] [-nc NOTES] [-t TAG] blog
+tumblr-dl.py [-h] [-nc NOTES] [-t TAG] blog
 
 positional arguments:
   blog                  tumblr blog to scrape
 
 optional arguments:
-  -h, --help            show this help message and exit
   -nc, --notes          only download images with >= this note count
   -t, --tag             only download images with this tag
 ```
@@ -26,10 +29,6 @@ Download images with the tag "homerun"
 
 Download images with the tag "homerun" *and* a note count of at least 100  
 `tumblr-dl.py makebaseballgreatagain -t homerun -nc 100`  
-
-## Requirements  
-1. Python 3.6  
-2. requests library `pip install requests`  
 
 ## Config
 This script uses the Tumblr API so you'll need an API key.  

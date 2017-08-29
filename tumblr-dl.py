@@ -71,7 +71,7 @@ def find_images(blog, api_key, tag, notes_min):
     """Loop through JSON results to find image urls"""
     offset = 0
 
-    print(f'[+] Targeting {tag or "ALL"} images with'
+    print(f'[+] Targeting {tag or "ALL"} images with '
           f'>= {notes_min or "NO LIMIT"} notes\n')
 
     while True:
@@ -79,11 +79,16 @@ def find_images(blog, api_key, tag, notes_min):
         post_count = len(js['posts'])
 
         for post in range(post_count):
+            num_images = len(js['posts'][post]['photos'])
+            if num_images > 1:
+                # Skip photoset posts (for now)
+                continue
+
             post_id = js['posts'][post]['id']
             img_url = js['posts'][post]['photos'][0]['original_size']['url']
             note_count = js['posts'][post]['note_count']
 
-            if (notes_min and notes_min > note_count) or not notes_min:
+            if (notes_min and notes_min <= note_count) or not notes_min:
                 dl_image(post_id, img_url, tag)
 
         if not post_count or post_count < 20:
